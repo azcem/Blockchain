@@ -3,7 +3,6 @@ import json
 from random import randint
 import time
 
-from numpy import block
 
 def generate_transactions(n):
     transactions = []
