@@ -3,6 +3,8 @@ import json
 from random import randint
 import time
 
+from numpy import block
+
 def generate_transactions(n):
     transactions = []
     for i in range(n):
@@ -117,6 +119,12 @@ class Blockchain:
             _, branch = self.add_block(new_block, proof)
             self.unconfirmed_transactions = []
             return new_block.index, branch
+    
+    def print(self):
+        print('<previous hash | Block no. | block hash>')
+        for i in range(len(self.chain)):
+            block = self.chain[i]
+            print(f'<{block.previous_hash} | Block {i} | {block.hash}>')
 
 
 def create_Block(n):
@@ -126,11 +134,13 @@ def create_Block(n):
 #INITIALIZING BLOCKCHAIN
 blockchain = Blockchain()
 t_mine = blockchain.tune()
-print(f'blocks are generated at a rate of one block per {t_mine}')
-n = int(input('enter number of blocks in blockchain: '))
-for i in range(n):
+print(f'blocks are generated at a rate of one block per {t_mine} seconds')
+n = int(input('enter number of blocks in blockchain: (minimum 1) '))
+for i in range(n-1):
     create_Block(3)
     blockchain.mine()
+print(f'blockchain now has {n} blocks')
+blockchain.print()
 
 #ATTACKING
 def attack(ind):
@@ -151,4 +161,5 @@ def attack(ind):
 n = int(input('determine block index for attack: '))
 speed, k, t = attack(n)
 print(f'{k} blocks are generated in {t} seconds, the attack speed is one block every {speed} seconds')
+blockchain.print()
 
